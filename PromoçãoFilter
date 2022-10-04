@@ -1,0 +1,49 @@
+package Streams;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.function.Function;
+import java.util.function.Predicate;
+
+public class PromoçãoFilter {
+
+	public static void main(String[] args) {
+		
+		/*Aqui estou criando um função para promoção de site 
+		 * onte o site vai colocar em distaque seus produtos que estão com desconto no momento 
+		 * Para essas função eu usei lambda,  Stream e Filter para filtrar os protudos que estão 
+		 * em promoção e com frete gratis no momento.
+		 */
+		
+		Produto p1 = new Produto("Lapis", 1.90, 0.12, 30);
+		Produto p2 = new Produto("Notebook", 4899.89, 0.32, 0);          //Produtos estão separados em 
+		Produto p3 = new Produto("Cadereno", 30, 0.45, 0);               //Preço, Desconto, e valor do frete 
+		Produto p4 = new Produto("Impresora", 1200, 0.40, 0);
+		Produto p5 = new Produto("Ipad", 3100, 0.29, 0);
+		Produto p6 = new Produto("Relogio", 1900, 0.12, 0);
+		Produto p7 = new Produto("Monitor", 800, 0.31, 0);
+		
+		List<Produto> produtos = Arrays.asList(p1, p2, p3, p4, p5, p6, p7);
+		
+		//Filter, filter, map
+		
+		Predicate<Produto> superPromocao = // aqui eu usei uma lambda pra fazer a promoçao, sendo que vai aparecer em destaque aqueles
+				p -> p.desconto >= 0.30;  //  que estão com desconto no valor acima de 30%
+				
+		Predicate<Produto> freteGratis = //Aqui eu apliquei frete gratis para os produtos que estão na "Promoção"
+				p -> p.valorFrete == 0;
+				
+		Predicate<Produto> precoRelevante = p -> p.preco >= 500; // aqui eu usei cmom filtro o preço, sendo relevante aquele com o valor inicial de R$500 Reais
+		
+		Function<Produto, String> chamadaPromocional =     //Aqui eu Passei o "slogam " da Promoçao que vai aparecere para o Cliente.
+				p -> "Aproveite Essa Promoção! " + p.nome + "Por R$: " + p.preco;
+		
+		produtos.stream()
+		.filter(freteGratis)
+		.filter(superPromocao)
+		.filter(precoRelevante)
+		.map(chamadaPromocional).forEach(System.out::println);
+
+	}
+
+}
